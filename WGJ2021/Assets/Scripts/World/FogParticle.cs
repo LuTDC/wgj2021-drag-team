@@ -19,10 +19,7 @@ public class FogParticle : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other){
-        if(other.gameObject.name == "Player" && player.getEnergy() > 0f){
-            player.decreaseEnergy();
-
-            Destroy(this.gameObject);
-        }
+        //is destroyed by the player's energy
+        //if(other.gameObject.name == "Player" && player.getEnergy() > 0f) Destroy(this.gameObject);
     }
 }

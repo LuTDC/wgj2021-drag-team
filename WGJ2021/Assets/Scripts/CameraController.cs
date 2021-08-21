@@ -17,12 +17,14 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //follow player
         transform.position = new Vector3(player.gameObject.transform.position.x, player.gameObject.transform.position.y, transform.position.z);
 
         if(canZoomIn) zoomIn();
         else if(canZoomOut) zoomOut();
     }
 
+    //zoom in when near an island
     public void allowZoomIn(){
         canZoomIn = true;
     }
@@ -31,6 +33,7 @@ public class CameraController : MonoBehaviour
         canZoomIn = false;
     }
 
+    //zoom out when get away from an island
     public void allowZoomOut(){
         canZoomOut = true;
     }
@@ -44,7 +47,7 @@ public class CameraController : MonoBehaviour
 
         camera.orthographicSize -= 0.005f;
 
-        if(camera.orthographicSize <= 2f) canZoomIn = false;
+        if(camera.orthographicSize <= 2.5f) canZoomIn = false;
     }
 
     private void zoomOut(){

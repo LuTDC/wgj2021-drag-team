@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Island
+  - Pet
+  - Fog
   layers:
   - Default
   - TransparentFX
