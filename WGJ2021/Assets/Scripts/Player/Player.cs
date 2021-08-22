@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Player : MonoBehaviour
 {
@@ -27,6 +28,13 @@ public class Player : MonoBehaviour
     private ParticleSystem particles;
     private bool particleState = true;
 
+    private DateTime gameOverTime;
+    private int gameOver;
+    private bool alreadyDying = false;
+
+    private List<Color> colors = new List<Color>();
+    private int colorIndex = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -52,6 +60,10 @@ public class Player : MonoBehaviour
         if(nearPet && Input.GetButtonDown("Talk")) triggerDialogue();
 
         if(insideFog) decreaseEnergy();
+
+        energyVerifier();
+
+        StartCoroutine(changeColor());
     }
 
     //movemente method
@@ -60,6 +72,12 @@ public class Player : MonoBehaviour
         verticalMovement = Input.GetAxis("Vertical");
         
         rigidBody.velocity = new Vector2(horizontalMovement*speed, verticalMovement*speed);
+
+        if(horizontalMovement != 0 || verticalMovement != 0) animator.SetBool("Moving", true);
+        else if(horizontalMovement == 0 && verticalMovement == 0) animator.SetBool("Moving", false);
+
+        animator.SetFloat("Horizontal", horizontalMovement);
+        animator.SetFloat("Vertical", verticalMovement);
     }
 
     private void particleController(){
@@ -98,13 +116,46 @@ public class Player : MonoBehaviour
     }
 
     private IEnumerator energyCoroutine(){
-        yield return new WaitForSeconds(0.001f);
+        yield return new WaitForSeconds(0.1f);
 
-        energy -= 0.01f;
+        energy -= 0.1f;
 
         if(energy < 0) energy = 0;
 
         uiController.allowDecrease();
+    }
+
+    private void energyVerifier(){
+        if(!alreadyDying && energy == 0 && insideFog){
+            gameOverTime = DateTime.Now;
+            gameOver = gameOverTime.Hour * 3600 + gameOverTime.Minute * 60 + gameOverTime.Second + 5;
+
+            alreadyDying = true;
+        }
+
+        int aux = DateTime.Now.Hour * 3600 + DateTime.Now.Minute * 60 + DateTime.Now.Second;
+
+        if(alreadyDying && aux == gameOver && insideFog) gameOverController();
+
+        if(insideFog == false) alreadyDying = false;
+    }
+
+    private void gameOverController(){
+        transform.position = checkpoint;
+
+        alreadyDying = false;
+    }
+
+    private IEnumerator changeColor(){
+        yield return new WaitForSeconds(1f);
+
+        if(colors.Count != 0){
+            colorIndex++;
+
+            if(colorIndex == colors.Count) colorIndex = 0;
+
+            GetComponent<SpriteRenderer>().color = colors[colorIndex];
+        }
     }
 
     //start dialogue with the nearby pet
@@ -132,9 +183,9 @@ public class Player : MonoBehaviour
             pet = other.gameObject;
         }
 
-        if(other.tag == "Fog" && energy > 0){
+        if(other.tag == "Fog"){
             insideFog = true;
-            Destroy(other.gameObject);
+            if(energy > 0) Destroy(other.gameObject);
         }
     }
 
@@ -150,5 +201,20 @@ public class Player : MonoBehaviour
             nearPet = false;
             pet = null;
         }
+    }
+
+    public void getBlue(){
+        Color blue = Color.blue;
+        colors.Add(blue);
+    }
+
+    public void getRed(){
+        Color red = Color.red;
+        colors.Add(red);
+    }
+
+    public void getGreen(){
+        Color green = Color.green;
+        colors.Add(green);
     }
 }
