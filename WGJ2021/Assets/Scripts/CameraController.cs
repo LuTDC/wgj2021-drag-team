@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CameraController : MonoBehaviour
 {
@@ -64,5 +65,17 @@ public class CameraController : MonoBehaviour
         camera.orthographicSize += 0.01f;
 
         if(camera.orthographicSize >= 5f) canZoomOut = false;
+    }
+
+    public void finalZoom(){
+        StartCoroutine(zoom());
+    }
+
+    private IEnumerator zoom(){
+        yield return new WaitForSeconds(0.1f);
+
+        GetComponent<Camera>().orthographicSize -= 1;
+
+        if(GetComponent<Camera>().orthographicSize >= 50) SceneManager.LoadScene("Credits");
     }
 }

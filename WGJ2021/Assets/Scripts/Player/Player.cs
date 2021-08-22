@@ -35,6 +35,8 @@ public class Player : MonoBehaviour
     private List<Color> colors = new List<Color>();
     private int colorIndex = 0;
 
+    private bool alreadyFinal = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -64,6 +66,8 @@ public class Player : MonoBehaviour
         energyVerifier();
 
         StartCoroutine(changeColor());
+
+        if(colors.Count == 3) final();
     }
 
     //movemente method
@@ -195,6 +199,8 @@ public class Player : MonoBehaviour
                 Destroy(other.gameObject);
                 decreaseEnergy();
             }
+
+            other.GetComponent<Pet>().activateSpace();
         }
     }
 
@@ -209,6 +215,8 @@ public class Player : MonoBehaviour
         if(other.tag == "Pet"){
             nearPet = false;
             pet = null;
+
+            other.GetComponent<Pet>().deactivateSpace();
         }
     }
 
@@ -225,5 +233,16 @@ public class Player : MonoBehaviour
     public void getGreen(){
         Color green = Color.green;
         colors.Add(green);
+    }
+
+    private void final(){
+        if(!alreadyFinal){
+            alreadyFinal = true;
+
+            isTalking = true;
+
+            camera.transform.position = new Vector3(20, -10, camera.transform.position.z);
+            camera.finalZoom();
+        }
     }
 }

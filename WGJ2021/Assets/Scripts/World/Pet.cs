@@ -19,6 +19,9 @@ public class Pet : MonoBehaviour
     [SerializeField]
     private int color;
 
+    [SerializeField]
+    private GameObject arrows, space;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +38,9 @@ public class Pet : MonoBehaviour
 
     public void startDialogue(){
         dialogue.SetActive(true);
+
+        arrows.SetActive(false);
+        space.SetActive(false);
 
         fill.enabled = false;
         frame.enabled = false;
@@ -69,5 +75,17 @@ public class Pet : MonoBehaviour
         emotionAnimator.SetTrigger("Sad");
 
         StartCoroutine(closeDialogue());
+    }
+
+    public int getColor(){
+        return color;
+    }
+
+    public void activateSpace(){
+        space.SetActive(true);
+    }
+
+    public void deactivateSpace(){
+        space.SetActive(false);
     }
 }
