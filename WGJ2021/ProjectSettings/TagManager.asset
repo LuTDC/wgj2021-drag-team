@@ -41,3 +41,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Paredes
+    uniqueID: 1435877073
+    locked: 0
