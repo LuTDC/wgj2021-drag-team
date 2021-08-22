@@ -8,6 +8,9 @@ public class CameraController : MonoBehaviour
 
     private bool canZoomIn = false, canZoomOut = false; 
 
+    [SerializeField]
+    private GameObject up, down, left, right;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +22,11 @@ public class CameraController : MonoBehaviour
     {
         //follow player
         transform.position = new Vector3(player.gameObject.transform.position.x, player.gameObject.transform.position.y, transform.position.z);
+
+        if(transform.position.x < left.transform.position.x) transform.position = new Vector3(left.transform.position.x, transform.position.y, transform.position.z);
+        if(transform.position.x > right.transform.position.x) transform.position = new Vector3(right.transform.position.x, transform.position.y, transform.position.z);
+        if(transform.position.y < down.transform.position.y) transform.position = new Vector3(transform.position.x, down.transform.position.y, transform.position.z);
+        if(transform.position.y > up.transform.position.y) transform.position = new Vector3(transform.position.x, up.transform.position.y, transform.position.z);
 
         if(canZoomIn) zoomIn();
         else if(canZoomOut) zoomOut();
@@ -45,15 +53,15 @@ public class CameraController : MonoBehaviour
     private void zoomIn(){
         Camera camera = GetComponent<Camera>();
 
-        camera.orthographicSize -= 0.005f;
+        camera.orthographicSize -= 0.01f;
 
-        if(camera.orthographicSize <= 2.5f) canZoomIn = false;
+        if(camera.orthographicSize <= 3.5f) canZoomIn = false;
     }
 
     private void zoomOut(){
         Camera camera = GetComponent<Camera>();
 
-        camera.orthographicSize += 0.005f;
+        camera.orthographicSize += 0.01f;
 
         if(camera.orthographicSize >= 5f) canZoomOut = false;
     }

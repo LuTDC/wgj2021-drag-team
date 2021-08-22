@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     private Rigidbody2D rigidBody;
+    private Animator animator;
 
     private CameraController camera;
     private UIController uiController;
@@ -23,13 +24,19 @@ public class Player : MonoBehaviour
 
     private bool isTalking = false;
 
+    private ParticleSystem particles;
+    private bool particleState = true;
+
     // Start is called before the first frame update
     void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
 
         camera = FindObjectOfType<CameraController>();
         uiController = FindObjectOfType<UIController>();
+
+        particles = transform.GetChild(0).gameObject.GetComponent<ParticleSystem>();
 
         checkpoint = transform.position;
     }
@@ -39,6 +46,8 @@ public class Player : MonoBehaviour
     {
         rigidBody.velocity = new Vector2(0f, 0f);
         if(!isTalking) Move(); //if talking to a pet, the player can't move
+
+        particleController();
 
         if(nearPet && Input.GetButtonDown("Talk")) triggerDialogue();
 
@@ -51,6 +60,23 @@ public class Player : MonoBehaviour
         verticalMovement = Input.GetAxis("Vertical");
         
         rigidBody.velocity = new Vector2(horizontalMovement*speed, verticalMovement*speed);
+    }
+
+    private void particleController(){
+        if((horizontalMovement != 0 || verticalMovement != 0) && !particleState){
+            particleState = true;
+            particles.Play();
+        }
+        else if(horizontalMovement == 0 && verticalMovement == 0 && particleState){
+            particleState = false;
+            particles.Stop();
+        }
+
+        if(horizontalMovement < 0) particles.transform.localRotation = Quaternion.Euler(360f, 90f, 90f);
+        else if(horizontalMovement > 0) particles.transform.localRotation = Quaternion.Euler(180f, 90f, 90f);
+
+        if(verticalMovement < 0) particles.transform.localRotation = Quaternion.Euler(270f, 90f, 90f);
+        else if(verticalMovement > 0) particles.transform.localRotation = Quaternion.Euler(90f, 0f, 0f);
     }
 
     public float getEnergy(){
@@ -118,7 +144,7 @@ public class Player : MonoBehaviour
             camera.cancelZoomIn();
         }
 
-        if(other.tag == "Fog") //insideFog = false;
+        if(other.tag == "Fog") insideFog = false;
 
         if(other.tag == "Pet"){
             nearPet = false;
