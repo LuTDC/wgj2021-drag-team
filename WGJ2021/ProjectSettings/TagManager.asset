@@ -3,7 +3,10 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Pet
+  - Island
+  - Fog
   layers:
   - Default
   - TransparentFX
@@ -41,6 +44,21 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 327718009
+    locked: 0
   - name: Paredes
     uniqueID: 1435877073
+    locked: 0
+  - name: Characters
+    uniqueID: 244205537
+    locked: 0
+  - name: VFX
+    uniqueID: 664077903
+    locked: 0
+  - name: Fog
+    uniqueID: 2066722277
+    locked: 0
+  - name: UI
+    uniqueID: 3443010067
     locked: 0
