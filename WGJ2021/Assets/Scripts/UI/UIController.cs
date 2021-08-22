@@ -40,7 +40,7 @@ public class UIController : MonoBehaviour
 
     //decrease energy gradually
     private void decreaseEnergy(){
-        slider.value -= 0.01f;
+        slider.value -= 0.1f;
 
         if(slider.value <= player.getEnergy()){
             slider.value = player.getEnergy();

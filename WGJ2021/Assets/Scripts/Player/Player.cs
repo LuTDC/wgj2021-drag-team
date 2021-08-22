@@ -105,7 +105,7 @@ public class Player : MonoBehaviour
     public void increaseEnergy(float amount){
         energy += amount;
 
-        if(energy > 100f) energy = 100f;
+        if(energy > 20f) energy = 20f;
 
         uiController.increaseEnergy();
     }
@@ -118,7 +118,7 @@ public class Player : MonoBehaviour
     private IEnumerator energyCoroutine(){
         yield return new WaitForSeconds(0.1f);
 
-        energy -= 0.1f;
+        energy -= 1f;
 
         if(energy < 0) energy = 0;
 
@@ -136,6 +136,12 @@ public class Player : MonoBehaviour
         int aux = DateTime.Now.Hour * 3600 + DateTime.Now.Minute * 60 + DateTime.Now.Second;
 
         if(alreadyDying && aux == gameOver && insideFog) gameOverController();
+
+        if(insideFog == false) StartCoroutine(fogVerifier());
+    }
+
+    private IEnumerator fogVerifier(){
+        yield return new WaitForSeconds(0.5f);
 
         if(insideFog == false) alreadyDying = false;
     }
@@ -185,7 +191,10 @@ public class Player : MonoBehaviour
 
         if(other.tag == "Fog"){
             insideFog = true;
-            if(energy > 0) Destroy(other.gameObject);
+            if(energy > 0){
+                Destroy(other.gameObject);
+                decreaseEnergy();
+            }
         }
     }
 
