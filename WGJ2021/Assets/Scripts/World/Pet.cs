@@ -49,7 +49,9 @@ public class Pet : MonoBehaviour
     private IEnumerator closeDialogue(){
         if(color == 0) player.getRed();
         else if(color == 1) player.getGreen();
-        else if(color == 3) player.getBlue();
+        else if(color == 2) player.getBlue();
+
+        player.changeCheckpoint();
 
         yield return new WaitForSeconds(1f);
 

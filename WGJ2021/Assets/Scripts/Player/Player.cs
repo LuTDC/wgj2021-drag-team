@@ -157,7 +157,7 @@ public class Player : MonoBehaviour
     }
 
     private IEnumerator changeColor(){
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(5f);
 
         if(colors.Count != 0){
             colorIndex++;
@@ -244,5 +244,9 @@ public class Player : MonoBehaviour
             camera.transform.position = new Vector3(20, -10, camera.transform.position.z);
             camera.finalZoom();
         }
+    }
+
+    public void changeCheckpoint(){
+        checkpoint = transform.position;
     }
 }

@@ -72,10 +72,12 @@ public class CameraController : MonoBehaviour
     }
 
     private IEnumerator zoom(){
-        yield return new WaitForSeconds(0.1f);
+        while(GetComponent<Camera>().orthographicSize < 20){
+            yield return new WaitForSeconds(0.1f);
 
-        GetComponent<Camera>().orthographicSize -= 1;
+            GetComponent<Camera>().orthographicSize += 0.1f;
+        }
 
-        if(GetComponent<Camera>().orthographicSize >= 50) SceneManager.LoadScene("Credits");
+        SceneManager.LoadScene("Credits");
     }
 }
